@@ -396,25 +396,25 @@ public class LogView extends ViewPart implements ILogListener {
 
 	private Action createOpenLogAction() {
 		Action action = null;
-		try {
-			// TODO this isn't the best way to check... we should be smarter and use package admin
-			// check to see if org.eclipse.ui.ide is available
-			Class.forName("org.eclipse.ui.ide.IDE"); //$NON-NLS-1$
-			// check to see if org.eclipse.core.filesystem is available
-			Class.forName("org.eclipse.core.filesystem.IFileStore"); //$NON-NLS-1$
-			action = new OpenIDELogFileAction(this);
-		} catch (ClassNotFoundException e) {
-			action = new Action() {
-				public void run() {
-					if (fInputFile.exists()) {
-						Job job = getOpenLogFileJob();
-						job.setUser(false);
-						job.setPriority(Job.SHORT);
-						job.schedule();
-					}
+//		try {
+//			// TODO this isn't the best way to check... we should be smarter and use package admin
+//			// check to see if org.eclipse.ui.ide is available
+//			Class.forName("org.eclipse.ui.ide.IDE"); //$NON-NLS-1$
+//			// check to see if org.eclipse.core.filesystem is available
+//			Class.forName("org.eclipse.core.filesystem.IFileStore"); //$NON-NLS-1$
+//			action = new OpenIDELogFileAction(this);
+//		} catch (ClassNotFoundException e) {
+		action = new Action() {
+			public void run() {
+				if (fInputFile.exists()) {
+					Job job = getOpenLogFileJob();
+					job.setUser(false);
+					job.setPriority(Job.SHORT);
+					job.schedule();
 				}
-			};
-		}
+			}
+		};
+//		}
 		action.setText(Messages.get().LogView_view_currentLog);
 		action.setImageDescriptor(SharedImages.getImageDescriptor(SharedImages.DESC_OPEN_LOG));
 		action.setDisabledImageDescriptor(SharedImages.getImageDescriptor(SharedImages.DESC_OPEN_LOG_DISABLED));
@@ -1651,8 +1651,8 @@ public class LogView extends ViewPart implements ILogListener {
 		final Shell shell = getViewSite().getShell();
 		return new Job(Messages.get().OpenLogDialog_message) {
 			protected IStatus run(IProgressMonitor monitor) {
-				boolean failed = false;
-				if (fInputFile.length() <= LogReader.MAX_FILE_LENGTH) {
+//				boolean failed = false;
+//				if (fInputFile.length() <= LogReader.MAX_FILE_LENGTH) {
 //					failed = !Program.launch(fInputFile.getAbsolutePath());
 //					if (failed) {
 //						Program p = Program.findProgram(".txt"); //$NON-NLS-1$
@@ -1661,16 +1661,16 @@ public class LogView extends ViewPart implements ILogListener {
 //							return Status.OK_STATUS;
 //						}
 //					}
-				}
-				if (failed) {
-					final OpenLogDialog openDialog = new OpenLogDialog(shell, fInputFile);
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							openDialog.create();
-							openDialog.open();
-						}
-					});
-				}
+//				}
+//				if (failed) {
+				final OpenLogDialog openDialog = new OpenLogDialog(shell, fInputFile);
+				shell.getDisplay().asyncExec(new Runnable() {
+					public void run() {
+						openDialog.create();
+						openDialog.open();
+					}
+				});
+//				}
 				return Status.OK_STATUS;
 			}
 		};
