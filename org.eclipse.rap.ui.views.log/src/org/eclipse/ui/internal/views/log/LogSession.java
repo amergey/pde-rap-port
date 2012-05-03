@@ -33,7 +33,7 @@ public class LogSession extends Group {
 	private Date date;
 
 	public LogSession() {
-		super(Messages.get().LogViewLabelProvider_Session);
+		super(null);
 	}
 
 	public Date getDate() {
@@ -73,5 +73,9 @@ public class LogSession extends Group {
 		writer.write(sessionData);
 		writer.println();
 		super.write(writer);
+	}
+
+	public String toString() {
+		return Messages.get().LogViewLabelProvider_Session;
 	}
 }

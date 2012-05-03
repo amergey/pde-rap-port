@@ -24,7 +24,6 @@ import java.util.*;
 import java.util.List;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.*;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -32,6 +31,7 @@ import org.eclipse.jface.util.Policy;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.Window;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.rap.ui.internal.preferences.SessionScope;
 import org.eclipse.rwt.RWT;
 import org.eclipse.rwt.service.IServiceHandler;
 import org.eclipse.rwt.widgets.ExternalBrowser;
@@ -1554,7 +1554,7 @@ public class LogView extends ViewPart implements ILogListener {
 	 * @return the plugin preferences
 	 */
 	private Preferences getLogPreferences() {
-		return (new InstanceScope()).getNode(Activator.PLUGIN_ID);
+		return (new SessionScope()).getNode(Activator.PLUGIN_ID);
 	}
 
 	/**
