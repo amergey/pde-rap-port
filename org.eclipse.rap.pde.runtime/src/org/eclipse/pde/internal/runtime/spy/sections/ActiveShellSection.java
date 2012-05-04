@@ -21,37 +21,35 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+
 /**
  * @since 3.4
  */
 public class ActiveShellSection implements ISpySection {
 
-	public void build(ScrolledForm form, SpyFormToolkit toolkit, ExecutionEvent event) {
-		final Shell shell = HandlerUtil.getActiveShell(event);
-		Object object = shell.getData();
-		if (object == null)
-			return;
-		Class clazz = object.getClass();
-
-		Section section = toolkit.createSection(form.getBody(), ExpandableComposite.TITLE_BAR);
-		section.clientVerticalSpacing = 9;
-
-		section.setText(PDERuntimeMessages.get().SpyDialog_activeShell_title);
-
-		FormText text = toolkit.createFormText(section, true);
-		section.setClient(text);
-		TableWrapData td = new TableWrapData();
-		td.align = TableWrapData.FILL;
-		td.grabHorizontal = true;
-		section.setLayoutData(td);
-
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("<form>"); //$NON-NLS-1$
-
-		buffer.append(toolkit.createClassSection(text, PDERuntimeMessages.get().SpyDialog_activeShell_desc, new Class[] {clazz}));
-
-		buffer.append("</form>"); //$NON-NLS-1$
-		text.setText(buffer.toString(), true, false);
-	}
-
+  public void build( ScrolledForm form, SpyFormToolkit toolkit, ExecutionEvent event ) {
+    final Shell shell = HandlerUtil.getActiveShell( event );
+    Object object = shell.getData();
+    if( object == null )
+      return;
+    Class clazz = object.getClass();
+    Section section = toolkit.createSection( form.getBody(), ExpandableComposite.TITLE_BAR );
+    section.clientVerticalSpacing = 9;
+    section.setText( PDERuntimeMessages.get().SpyDialog_activeShell_title );
+    FormText text = toolkit.createFormText( section, true );
+    section.setClient( text );
+    TableWrapData td = new TableWrapData();
+    td.align = TableWrapData.FILL;
+    td.grabHorizontal = true;
+    section.setLayoutData( td );
+    StringBuffer buffer = new StringBuffer();
+    buffer.append( "<form>" ); //$NON-NLS-1$
+    buffer.append( toolkit.createClassSection( text,
+                                               PDERuntimeMessages.get().SpyDialog_activeShell_desc,
+                                               new Class[] {
+                                                 clazz
+                                               } ) );
+    buffer.append( "</form>" ); //$NON-NLS-1$
+    text.setText( buffer.toString(), true, false );
+  }
 }

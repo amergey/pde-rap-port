@@ -17,28 +17,28 @@ import org.eclipse.pde.internal.runtime.spy.dialogs.SpyDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+
 /**
  * @since 3.4
  */
 public class SpyHandler extends AbstractHandler {
 
-	private SpyDialog INSTANCE = null;
+  private SpyDialog INSTANCE = null;
 
-	public SpyHandler() { // do nothing
-	}
+  public SpyHandler() { // do nothing
+  }
 
-	public Object execute(ExecutionEvent event) {
-		if (event != null) {
-			if (INSTANCE != null && INSTANCE.getShell() != null && !INSTANCE.getShell().isDisposed()) {
-				INSTANCE.close();
-			}
-			Shell shell = HandlerUtil.getActiveShell(event);
-			SpyDialog dialog = new SpyDialog(shell, event, shell.getDisplay().getCursorLocation());
-			INSTANCE = dialog;
-			dialog.create();
-			dialog.open();
-		}
-		return null;
-	}
-
+  public Object execute( ExecutionEvent event ) {
+    if( event != null ) {
+      if( INSTANCE != null && INSTANCE.getShell() != null && !INSTANCE.getShell().isDisposed() ) {
+        INSTANCE.close();
+      }
+      Shell shell = HandlerUtil.getActiveShell( event );
+      SpyDialog dialog = new SpyDialog( shell, event, shell.getDisplay().getCursorLocation() );
+      INSTANCE = dialog;
+      dialog.create();
+      dialog.open();
+    }
+    return null;
+  }
 }

@@ -15,46 +15,47 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 
+
 public class RegistryFilteredTree extends FilteredTree {
 
-	private RegistryBrowser browser;
+  private RegistryBrowser browser;
 
-	public RegistryFilteredTree(RegistryBrowser browser, Composite parent, int treeStyle, PatternFilter filter) {
-		super(parent, treeStyle, filter, true);
-		this.browser = browser;
-	}
+  public RegistryFilteredTree( RegistryBrowser browser,
+                               Composite parent,
+                               int treeStyle,
+                               PatternFilter filter )
+  {
+    super( parent, treeStyle, filter, true );
+    this.browser = browser;
+  }
 
-	protected void createControl(Composite parent, int treeStyle) {
-		super.createControl(parent, treeStyle);
+  protected void createControl( Composite parent, int treeStyle ) {
+    super.createControl( parent, treeStyle );
+    // add 2px margin around filter text
+    FormLayout layout = new FormLayout();
+    layout.marginHeight = 0;
+    layout.marginWidth = 0;
+    setLayout( layout );
+    FormData data = new FormData();
+    data.left = new FormAttachment( 0, 0 );
+    data.right = new FormAttachment( 100, 0 );
+    data.bottom = new FormAttachment( 100, 0 );
+    if( showFilterControls ) {
+      FormData filterData = new FormData();
+      filterData.top = new FormAttachment( 0, 2 );
+      filterData.left = new FormAttachment( 0, 2 );
+      filterData.right = new FormAttachment( 100, -2 );
+      filterComposite.setLayoutData( filterData );
+      data.top = new FormAttachment( filterComposite, 2 );
+    } else {
+      data.top = new FormAttachment( 0, 0 );
+    }
+    treeComposite.setLayoutData( data );
+  }
 
-		// add 2px margin around filter text
-
-		FormLayout layout = new FormLayout();
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
-		setLayout(layout);
-
-		FormData data = new FormData();
-		data.left = new FormAttachment(0, 0);
-		data.right = new FormAttachment(100, 0);
-		data.bottom = new FormAttachment(100, 0);
-		if (showFilterControls) {
-			FormData filterData= new FormData();
-			filterData.top = new FormAttachment(0, 2);
-			filterData.left = new FormAttachment(0, 2);
-			filterData.right = new FormAttachment(100, -2);
-			filterComposite.setLayoutData(filterData);
-			data.top = new FormAttachment(filterComposite, 2);
-		} else {
-			data.top = new FormAttachment(0, 0);
-		}
-		treeComposite.setLayoutData(data);
-	}
-
-	protected void updateToolbar(boolean visible) {
-		super.updateToolbar(visible);
-
-		// update view title on viewer's toolbar update
-		browser.updateTitle();
-	}
+  protected void updateToolbar( boolean visible ) {
+    super.updateToolbar( visible );
+    // update view title on viewer's toolbar update
+    browser.updateTitle();
+  }
 }

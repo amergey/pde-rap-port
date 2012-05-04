@@ -23,133 +23,124 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
+
 public class PDERuntimePlugin extends AbstractUIPlugin {
 
-	public static final String ID = "org.eclipse.rap.pde.runtime"; //$NON-NLS-1$
+  public static final String ID = "org.eclipse.rap.pde.runtime"; //$NON-NLS-1$
+  private static PDERuntimePlugin inst;
+  private BundleContext fContext;
+  private ServiceTracker packageAdminTracker;
+  private ServiceTracker platformAdminTracker;
 
-	private static PDERuntimePlugin inst;
-	private BundleContext fContext;
-	private ServiceTracker packageAdminTracker;
-	private ServiceTracker platformAdminTracker;
+  public PDERuntimePlugin() {
+    inst = this;
+  }
 
-	public PDERuntimePlugin() {
-		inst = this;
-	}
+  private static boolean isBundleAvailable( String bundleID ) {
+    Bundle bundle = Platform.getBundle( bundleID );
+    return bundle != null
+           && ( bundle.getState() & ( Bundle.ACTIVE | Bundle.STARTING | Bundle.RESOLVED ) ) != 0;
+  }
 
-	private static boolean isBundleAvailable(String bundleID) {
-		Bundle bundle = Platform.getBundle(bundleID);
-		return bundle != null
-				&& (bundle.getState() & (Bundle.ACTIVE | Bundle.STARTING | Bundle.RESOLVED)) != 0;
-	}
+  public static final boolean HAS_IDE_BUNDLES = false;
 
-	public static final boolean HAS_IDE_BUNDLES = false;
+  // static {
+  // boolean result = false;
+  // try {
+  //			result = isBundleAvailable("org.eclipse.core.resources") //$NON-NLS-1$
+  //					&& isBundleAvailable("org.eclipse.pde.core") //$NON-NLS-1$
+  //					&& isBundleAvailable("org.eclipse.jdt.core") //$NON-NLS-1$
+  //					&& isBundleAvailable("org.eclipse.help") //$NON-NLS-1$
+  //					&& isBundleAvailable("org.eclipse.pde.ui") //$NON-NLS-1$
+  //					&& isBundleAvailable("org.eclipse.jdt.ui"); //$NON-NLS-1$
+  // } catch (Throwable exception) { // do nothing
+  // }
+  // HAS_IDE_BUNDLES = result;
+  // }
+  public static IWorkbenchPage getActivePage() {
+    return getDefault().internalGetActivePage();
+  }
 
-	// static {
-	// boolean result = false;
-	// try {
-	//			result = isBundleAvailable("org.eclipse.core.resources") //$NON-NLS-1$
-	//					&& isBundleAvailable("org.eclipse.pde.core") //$NON-NLS-1$
-	//					&& isBundleAvailable("org.eclipse.jdt.core") //$NON-NLS-1$
-	//					&& isBundleAvailable("org.eclipse.help") //$NON-NLS-1$
-	//					&& isBundleAvailable("org.eclipse.pde.ui") //$NON-NLS-1$
-	//					&& isBundleAvailable("org.eclipse.jdt.ui"); //$NON-NLS-1$
-	// } catch (Throwable exception) { // do nothing
-	// }
-	// HAS_IDE_BUNDLES = result;
-	// }
+  public static Shell getActiveWorkbenchShell() {
+    return getActiveWorkbenchWindow().getShell();
+  }
 
-	public static IWorkbenchPage getActivePage() {
-		return getDefault().internalGetActivePage();
-	}
+  public static IWorkbenchWindow getActiveWorkbenchWindow() {
+    return getDefault().getWorkbench().getActiveWorkbenchWindow();
+  }
 
-	public static Shell getActiveWorkbenchShell() {
-		return getActiveWorkbenchWindow().getShell();
-	}
+  public PackageAdmin getPackageAdmin() {
+    if( packageAdminTracker == null ) {
+      return null;
+    }
+    return ( PackageAdmin )packageAdminTracker.getService();
+  }
 
-	public static IWorkbenchWindow getActiveWorkbenchWindow() {
-		return getDefault().getWorkbench().getActiveWorkbenchWindow();
-	}
+  public PlatformAdmin getPlatformAdmin() {
+    if( platformAdminTracker == null ) {
+      return null;
+    }
+    return ( PlatformAdmin )platformAdminTracker.getService();
+  }
 
-	public PackageAdmin getPackageAdmin() {
-		if (packageAdminTracker == null) {
-			return null;
-		}
-		return (PackageAdmin) packageAdminTracker.getService();
-	}
+  public static PDERuntimePlugin getDefault() {
+    return inst;
+  }
 
-	public PlatformAdmin getPlatformAdmin() {
-		if (platformAdminTracker == null) {
-			return null;
-		}
-		return (PlatformAdmin) platformAdminTracker.getService();
-	}
+  public static String getPluginId() {
+    return getDefault().getBundle().getSymbolicName();
+  }
 
-	public static PDERuntimePlugin getDefault() {
-		return inst;
-	}
+  private IWorkbenchPage internalGetActivePage() {
+    return getWorkbench().getActiveWorkbenchWindow().getActivePage();
+  }
 
-	public static String getPluginId() {
-		return getDefault().getBundle().getSymbolicName();
-	}
+  /*
+   * (non-Javadoc)
+   * @see org.eclipse.core.runtime.Plugin#start(org.osgi.framework.BundleContext)
+   */
+  public void start( BundleContext context ) throws Exception {
+    super.start( context );
+    this.fContext = context;
+    packageAdminTracker = new ServiceTracker( context, PackageAdmin.class.getName(), null );
+    packageAdminTracker.open();
+    platformAdminTracker = new ServiceTracker( context, PlatformAdmin.class.getName(), null );
+    platformAdminTracker.open();
+  }
 
-	private IWorkbenchPage internalGetActivePage() {
-		return getWorkbench().getActiveWorkbenchWindow().getActivePage();
-	}
+  public BundleContext getBundleContext() {
+    return this.fContext;
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.core.runtime.Plugin#start(org.osgi.framework.BundleContext)
-	 */
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		this.fContext = context;
+  public State getState() {
+    return getPlatformAdmin().getState( false );
+  }
 
-		packageAdminTracker = new ServiceTracker(context,
-				PackageAdmin.class.getName(), null);
-		packageAdminTracker.open();
+  public static void log( Throwable e ) {
+    if( e instanceof InvocationTargetException )
+      e = ( ( InvocationTargetException )e ).getTargetException();
+    IStatus status = null;
+    if( e instanceof CoreException ) {
+      status = ( ( CoreException )e ).getStatus();
+    } else if( e.getMessage() != null ) {
+      status = new Status( IStatus.ERROR, ID, IStatus.OK, e.getMessage(), e );
+    }
+    if( status != null )
+      getDefault().getLog().log( status );
+  }
 
-		platformAdminTracker = new ServiceTracker(context,
-				PlatformAdmin.class.getName(), null);
-		platformAdminTracker.open();
-	}
-
-	public BundleContext getBundleContext() {
-		return this.fContext;
-	}
-
-	public State getState() {
-		return getPlatformAdmin().getState(false);
-	}
-
-	public static void log(Throwable e) {
-		if (e instanceof InvocationTargetException)
-			e = ((InvocationTargetException) e).getTargetException();
-		IStatus status = null;
-		if (e instanceof CoreException) {
-			status = ((CoreException) e).getStatus();
-		} else if (e.getMessage() != null) {
-			status = new Status(IStatus.ERROR, ID, IStatus.OK, e.getMessage(),
-					e);
-		}
-		if (status != null)
-			getDefault().getLog().log(status);
-	}
-
-	/**
-	 * This method is called when the plug-in is stopped
-	 */
-	public void stop(BundleContext context) throws Exception {
-		super.stop(context);
-		if (packageAdminTracker != null) {
-			packageAdminTracker.close();
-			packageAdminTracker = null;
-		}
-		if (platformAdminTracker != null) {
-			platformAdminTracker.close();
-			platformAdminTracker = null;
-		}
-	}
-
+  /**
+   * This method is called when the plug-in is stopped
+   */
+  public void stop( BundleContext context ) throws Exception {
+    super.stop( context );
+    if( packageAdminTracker != null ) {
+      packageAdminTracker.close();
+      packageAdminTracker = null;
+    }
+    if( platformAdminTracker != null ) {
+      platformAdminTracker.close();
+      platformAdminTracker = null;
+    }
+  }
 }

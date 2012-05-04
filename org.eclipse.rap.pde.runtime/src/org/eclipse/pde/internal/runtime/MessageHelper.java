@@ -15,25 +15,29 @@ import org.eclipse.osgi.service.resolver.ImportPackageSpecification;
 import org.eclipse.osgi.service.resolver.VersionConstraint;
 import org.eclipse.osgi.util.NLS;
 
+
 public class MessageHelper {
-	public static String getResolutionFailureMessage(VersionConstraint unsatisfied) {
-		if (unsatisfied.isResolved())
-			throw new IllegalArgumentException();
-		if (unsatisfied instanceof ImportPackageSpecification)
-			return NLS.bind(PDERuntimeMessages.get().MessageHelper_missing_imported_package, toString(unsatisfied));
-		else if (unsatisfied instanceof BundleSpecification) {
-			if (((BundleSpecification) unsatisfied).isOptional())
-				return NLS.bind(PDERuntimeMessages.get().MessageHelper_missing_optional_required_bundle, toString(unsatisfied));
-			return NLS.bind(PDERuntimeMessages.get().MessageHelper_missing_required_bundle, toString(unsatisfied));
-		} else
-			return NLS.bind(PDERuntimeMessages.get().MessageHelper_missing_host, toString(unsatisfied));
-	}
 
-	private static String toString(VersionConstraint constraint) {
-		org.eclipse.osgi.service.resolver.VersionRange versionRange = constraint.getVersionRange();
-		if (versionRange == null)
-			return constraint.getName();
-		return constraint.getName() + '_' + versionRange;
-	}
+  public static String getResolutionFailureMessage( VersionConstraint unsatisfied ) {
+    if( unsatisfied.isResolved() )
+      throw new IllegalArgumentException();
+    if( unsatisfied instanceof ImportPackageSpecification )
+      return NLS.bind( PDERuntimeMessages.get().MessageHelper_missing_imported_package,
+                       toString( unsatisfied ) );
+    else if( unsatisfied instanceof BundleSpecification ) {
+      if( ( ( BundleSpecification )unsatisfied ).isOptional() )
+        return NLS.bind( PDERuntimeMessages.get().MessageHelper_missing_optional_required_bundle,
+                         toString( unsatisfied ) );
+      return NLS.bind( PDERuntimeMessages.get().MessageHelper_missing_required_bundle,
+                       toString( unsatisfied ) );
+    } else
+      return NLS.bind( PDERuntimeMessages.get().MessageHelper_missing_host, toString( unsatisfied ) );
+  }
 
+  private static String toString( VersionConstraint constraint ) {
+    org.eclipse.osgi.service.resolver.VersionRange versionRange = constraint.getVersionRange();
+    if( versionRange == null )
+      return constraint.getName();
+    return constraint.getName() + '_' + versionRange;
+  }
 }

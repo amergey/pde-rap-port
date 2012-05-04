@@ -22,79 +22,79 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+
 /**
  * @since 3.5
  */
 public class MenuSpyHandler extends AbstractHandler implements Listener {
 
-	private PopupDialog INSTANCE = null;
-	private Cursor defaultCursor;
-	private Cursor spyCursor;
+  private PopupDialog INSTANCE = null;
+  private Cursor defaultCursor;
+  private Cursor spyCursor;
 
-	public MenuSpyHandler() {
-		// do nothing
-	}
+  public MenuSpyHandler() {
+    // do nothing
+  }
 
-	public Object execute(ExecutionEvent event) {
-		if (event != null) {
-			if (INSTANCE != null && INSTANCE.getShell() != null && !INSTANCE.getShell().isDisposed()) {
-				INSTANCE.close();
-			}
+  public Object execute( ExecutionEvent event ) {
+    if( event != null ) {
+      if( INSTANCE != null && INSTANCE.getShell() != null && !INSTANCE.getShell().isDisposed() ) {
+        INSTANCE.close();
+      }
+      Shell shell = HandlerUtil.getActiveShell( event );
+      if( shell != null ) {
+        Display display = shell.getDisplay();
+        display.addFilter( SWT.Selection, this );
+// display.addFilter(SWT.KeyDown, this);
+        display.addFilter( SWT.Show, this );
+        if( display.getActiveShell() != null ) {
+          defaultCursor = display.getActiveShell().getCursor();
+// Image image = PDERuntimePluginImages.get(PDERuntimePluginImages.IMG_MENUSPY_OBJ);
+// spyCursor = new Cursor(display, image.getImageData(), 7, 7);
+          spyCursor = display.getSystemCursor( SWT.CURSOR_HAND );
+          display.getActiveShell().setCursor( spyCursor );
+        }
+      }
+    }
+    return null;
+  }
 
-			Shell shell = HandlerUtil.getActiveShell(event);
-			if (shell != null) {
-				Display display = shell.getDisplay();
-				display.addFilter(SWT.Selection, this);
-//				display.addFilter(SWT.KeyDown, this);
-				display.addFilter(SWT.Show, this);
-				if (display.getActiveShell() != null) {
-					defaultCursor = display.getActiveShell().getCursor();
-//					Image image = PDERuntimePluginImages.get(PDERuntimePluginImages.IMG_MENUSPY_OBJ);
-//					spyCursor = new Cursor(display, image.getImageData(), 7, 7);
-					spyCursor = display.getSystemCursor(SWT.CURSOR_HAND);
-					display.getActiveShell().setCursor(spyCursor);
-				}
-			}
-		}
-		return null;
-	}
-
-	// TODO clean up this code
-	public void handleEvent(Event event) {
-		Display display = event.widget.getDisplay();
-		switch (event.type) {
-//			case SWT.KeyDown :
-//				if (event.keyCode == SWT.ESC)
-//					break;
-			case SWT.Show :
-				if (spyCursor != null) {
-					Shell shell = display.getActiveShell();
-					if (shell != null) {
-						shell.setCursor(spyCursor);
-					}
-				}
-				return;
-		}
-		display.removeFilter(SWT.Selection, this);
-//		event.display.removeFilter(SWT.KeyDown, this);
-		display.removeFilter(SWT.Show, this);
-		if (spyCursor != null) {
-			if (display.getActiveShell() != null) {
-				display.getActiveShell().setCursor(defaultCursor);
-				defaultCursor = null;
-//				spyCursor.dispose();
-				spyCursor = null;
-			}
-		}
-
-		if (event.type == SWT.Selection) {
-			Shell shell = display.getActiveShell();
-			MenuSpyDialog dialog = new MenuSpyDialog(shell, event, shell.getDisplay().getCursorLocation());
-			INSTANCE = dialog;
-			dialog.create();
-			dialog.open();
-			event.doit = false;
-			event.type = SWT.None;
-		}
-	}
+  // TODO clean up this code
+  public void handleEvent( Event event ) {
+    Display display = event.widget.getDisplay();
+    switch( event.type ) {
+// case SWT.KeyDown :
+// if (event.keyCode == SWT.ESC)
+// break;
+      case SWT.Show:
+        if( spyCursor != null ) {
+          Shell shell = display.getActiveShell();
+          if( shell != null ) {
+            shell.setCursor( spyCursor );
+          }
+        }
+        return;
+    }
+    display.removeFilter( SWT.Selection, this );
+// event.display.removeFilter(SWT.KeyDown, this);
+    display.removeFilter( SWT.Show, this );
+    if( spyCursor != null ) {
+      if( display.getActiveShell() != null ) {
+        display.getActiveShell().setCursor( defaultCursor );
+        defaultCursor = null;
+// spyCursor.dispose();
+        spyCursor = null;
+      }
+    }
+    if( event.type == SWT.Selection ) {
+      Shell shell = display.getActiveShell();
+      MenuSpyDialog dialog = new MenuSpyDialog( shell, event, shell.getDisplay()
+        .getCursorLocation() );
+      INSTANCE = dialog;
+      dialog.create();
+      dialog.open();
+      event.doit = false;
+      event.type = SWT.None;
+    }
+  }
 }

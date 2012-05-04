@@ -12,13 +12,13 @@ package org.eclipse.pde.internal.runtime.registry.model;
 
 public class BundleLibrary extends ModelObject {
 
-	private String library;
+  private String library;
 
-	public String getLibrary() {
-		return library;
-	}
+  public String getLibrary() {
+    return library;
+  }
 
-	public void setLibrary(String name) {
-		library = name;
-	}
+  public void setLibrary( String name ) {
+    library = name;
+  }
 }

@@ -11,12 +11,11 @@
 package org.eclipse.pde.internal.runtime.registry.model;
 
 /**
- * Event provides a list of objects that have changed.
- * Possible objects on the list are IBundle, IService, IExtension, IExtensionPoint.
- * 
- * This is temporary solution and is subject to future changes.
+ * Event provides a list of objects that have changed. Possible objects on the list are IBundle,
+ * IService, IExtension, IExtensionPoint. This is temporary solution and is subject to future
+ * changes.
  */
 public interface ModelChangeListener {
 
-	void modelChanged(ModelChangeDelta[] deltas);
+  void modelChanged( ModelChangeDelta[] deltas );
 }

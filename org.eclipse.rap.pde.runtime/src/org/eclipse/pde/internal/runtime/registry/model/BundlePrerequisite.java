@@ -12,40 +12,40 @@ package org.eclipse.pde.internal.runtime.registry.model;
 
 public class BundlePrerequisite extends ModelObject {
 
-	private boolean isExported;
-	private String name;
-	private String version;
-	private boolean isPackage;
+  private boolean isExported;
+  private String name;
+  private String version;
+  private boolean isPackage;
 
-	public void setPackage(boolean isPackage) {
-		this.isPackage = isPackage;
-	}
+  public void setPackage( boolean isPackage ) {
+    this.isPackage = isPackage;
+  }
 
-	public boolean isPackage() {
-		return isPackage;
-	}
+  public boolean isPackage() {
+    return isPackage;
+  }
 
-	public void setExported(boolean isExported) {
-		this.isExported = isExported;
-	}
+  public void setExported( boolean isExported ) {
+    this.isExported = isExported;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName( String name ) {
+    this.name = name;
+  }
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
+  public void setVersion( String version ) {
+    this.version = version;
+  }
 
-	public boolean isExported() {
-		return isExported;
-	}
+  public boolean isExported() {
+    return isExported;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public String getVersion() {
-		return version;
-	}
+  public String getVersion() {
+    return version;
+  }
 }

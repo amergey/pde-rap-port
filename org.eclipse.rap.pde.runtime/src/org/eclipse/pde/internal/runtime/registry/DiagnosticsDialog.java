@@ -16,29 +16,30 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.*;
 
+
 public class DiagnosticsDialog extends ErrorDialog {
 
-	public DiagnosticsDialog(Shell parentShell, String dialogTitle,
-			String message, IStatus status, int displayMask) {
-		super(parentShell, dialogTitle, message, status, displayMask);
-	}
+  public DiagnosticsDialog( Shell parentShell,
+                            String dialogTitle,
+                            String message,
+                            IStatus status,
+                            int displayMask )
+  {
+    super( parentShell, dialogTitle, message, status, displayMask );
+  }
 
-	protected Control createDialogArea(Composite parent) {
-		Control area = super.createDialogArea(parent);
-		createDropDownList((Composite) area);
-		return area;
-	}
+  protected Control createDialogArea( Composite parent ) {
+    Control area = super.createDialogArea( parent );
+    createDropDownList( ( Composite )area );
+    return area;
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar(org.eclipse
-	 * .swt.widgets.Composite)
-	 */
-	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID,
-				IDialogConstants.get().OK_LABEL, true);
-	}
-
+  /*
+   * (non-Javadoc)
+   * @see org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar(org.eclipse
+   * .swt.widgets.Composite)
+   */
+  protected void createButtonsForButtonBar( Composite parent ) {
+    createButton( parent, IDialogConstants.OK_ID, IDialogConstants.get().OK_LABEL, true );
+  }
 }

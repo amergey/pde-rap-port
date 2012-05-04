@@ -14,26 +14,26 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.MultiStatus;
 import org.osgi.framework.BundleException;
 
+
 public interface RegistryBackend {
 
-	public void connect(IProgressMonitor monitor);
+  public void connect( IProgressMonitor monitor );
 
-	public void disconnect();
+  public void disconnect();
 
-	public void setEnabled(long id, boolean enabled);
+  public void setEnabled( long id, boolean enabled );
 
-	public void start(long id) throws BundleException;
+  public void start( long id ) throws BundleException;
 
-	public void stop(long id) throws BundleException;
+  public void stop( long id ) throws BundleException;
 
-	public MultiStatus diagnose(long id);
+  public MultiStatus diagnose( long id );
 
-	public void initializeBundles(IProgressMonitor monitor);
+  public void initializeBundles( IProgressMonitor monitor );
 
-	public void initializeExtensionPoints(IProgressMonitor monitor);
+  public void initializeExtensionPoints( IProgressMonitor monitor );
 
-	public void setRegistryListener(BackendChangeListener listener);
+  public void setRegistryListener( BackendChangeListener listener );
 
-	public void initializeServices(IProgressMonitor monitor);
-
+  public void initializeServices( IProgressMonitor monitor );
 }

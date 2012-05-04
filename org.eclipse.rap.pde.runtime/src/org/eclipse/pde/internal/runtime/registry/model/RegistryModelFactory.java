@@ -10,22 +10,16 @@
  *******************************************************************************/
 package org.eclipse.pde.internal.runtime.registry.model;
 
-
 /**
- * Produces RegistryModels for URLs. Valid URLs:
- * local
- * target
- * remote://host:port
- *
+ * Produces RegistryModels for URLs. Valid URLs: local target remote://host:port
  */
 public class RegistryModelFactory {
 
-	/**
-	 * 
-	 * @param uri
-	 * @return never returns null
-	 */
-	public static RegistryModel getRegistryModel(String uri) {
-		return new RegistryModel(new LocalRegistryBackend());
-	}
+  /**
+   * @param uri
+   * @return never returns null
+   */
+  public static RegistryModel getRegistryModel( String uri ) {
+    return new RegistryModel( new LocalRegistryBackend() );
+  }
 }

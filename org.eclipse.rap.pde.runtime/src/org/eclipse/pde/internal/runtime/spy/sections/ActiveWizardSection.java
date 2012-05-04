@@ -28,48 +28,46 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.osgi.framework.Bundle;
 import org.osgi.service.packageadmin.PackageAdmin;
 
+
 /**
  * @since 3.4
  */
 public class ActiveWizardSection implements ISpySection {
 
-	public void build(ScrolledForm form, SpyFormToolkit toolkit, ExecutionEvent event) {
-		final Shell shell = HandlerUtil.getActiveShell(event);
-		Object object = shell.getData();
-		if (object == null)
-			return;
-		Class clazz = object.getClass();
-
-		if (object instanceof WizardDialog) {
-			WizardDialog dialog = (WizardDialog) object;
-			IWizardPage page = dialog.getCurrentPage();
-			IWizard wizard = page.getWizard();
-			clazz = wizard.getClass();
-
-			Section section = toolkit.createSection(form.getBody(), ExpandableComposite.TITLE_BAR);
-			section.clientVerticalSpacing = 9;
-
-			// the active wizard
-			FormText text = toolkit.createFormText(section, true);
-			section.setClient(text);
-			TableWrapData td = new TableWrapData();
-			td.align = TableWrapData.FILL;
-			td.grabHorizontal = true;
-			section.setLayoutData(td);
-
-			StringBuffer buffer = new StringBuffer();
-			buffer.append("<form>"); //$NON-NLS-1$
-			section.setText(NLS.bind(PDERuntimeMessages.get().SpyDialog_activeWizard_title, wizard.getWindowTitle()));
-
-			buffer.append(toolkit.createClassSection(text, PDERuntimeMessages.get().SpyDialog_activeWizard_desc, new Class[] {clazz}));
-
-			PackageAdmin admin = PDERuntimePlugin.getDefault().getPackageAdmin();
-			Bundle bundle = admin.getBundle(clazz);
-			toolkit.generatePluginDetailsText(bundle, null, "wizard", buffer, text); //$NON-NLS-1$
-			buffer.append("</form>"); //$NON-NLS-1$
-
-			text.setText(buffer.toString(), true, false);
-		}
-	}
-
+  public void build( ScrolledForm form, SpyFormToolkit toolkit, ExecutionEvent event ) {
+    final Shell shell = HandlerUtil.getActiveShell( event );
+    Object object = shell.getData();
+    if( object == null )
+      return;
+    Class clazz = object.getClass();
+    if( object instanceof WizardDialog ) {
+      WizardDialog dialog = ( WizardDialog )object;
+      IWizardPage page = dialog.getCurrentPage();
+      IWizard wizard = page.getWizard();
+      clazz = wizard.getClass();
+      Section section = toolkit.createSection( form.getBody(), ExpandableComposite.TITLE_BAR );
+      section.clientVerticalSpacing = 9;
+      // the active wizard
+      FormText text = toolkit.createFormText( section, true );
+      section.setClient( text );
+      TableWrapData td = new TableWrapData();
+      td.align = TableWrapData.FILL;
+      td.grabHorizontal = true;
+      section.setLayoutData( td );
+      StringBuffer buffer = new StringBuffer();
+      buffer.append( "<form>" ); //$NON-NLS-1$
+      section.setText( NLS.bind( PDERuntimeMessages.get().SpyDialog_activeWizard_title,
+                                 wizard.getWindowTitle() ) );
+      buffer.append( toolkit.createClassSection( text,
+                                                 PDERuntimeMessages.get().SpyDialog_activeWizard_desc,
+                                                 new Class[] {
+                                                   clazz
+                                                 } ) );
+      PackageAdmin admin = PDERuntimePlugin.getDefault().getPackageAdmin();
+      Bundle bundle = admin.getBundle( clazz );
+      toolkit.generatePluginDetailsText( bundle, null, "wizard", buffer, text ); //$NON-NLS-1$
+      buffer.append( "</form>" ); //$NON-NLS-1$
+      text.setText( buffer.toString(), true, false );
+    }
+  }
 }

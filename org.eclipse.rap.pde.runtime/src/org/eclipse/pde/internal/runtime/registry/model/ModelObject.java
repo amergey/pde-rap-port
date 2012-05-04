@@ -12,12 +12,12 @@ package org.eclipse.pde.internal.runtime.registry.model;
 
 public abstract class ModelObject {
 
-	/**
-	 * The registry model, possibly <code>null</code>
-	 */
-	protected RegistryModel model;
+  /**
+   * The registry model, possibly <code>null</code>
+   */
+  protected RegistryModel model;
 
-	public void setModel(RegistryModel model) {
-		this.model = model;
-	}
+  public void setModel( RegistryModel model ) {
+    this.model = model;
+  }
 }

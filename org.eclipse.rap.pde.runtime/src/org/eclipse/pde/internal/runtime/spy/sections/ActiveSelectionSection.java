@@ -25,56 +25,63 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+
 /**
  * @since 3.4
  */
 public class ActiveSelectionSection implements ISpySection {
 
-	public void build(ScrolledForm form, SpyFormToolkit toolkit, ExecutionEvent event) {
-		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
-		if (window == null) // if we don't have an active workbench, we don't have a valid selection to analyze
-			return;
-
-		// analyze the selection
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (selection != null) {
-			Section section = toolkit.createSection(form.getBody(), ExpandableComposite.TITLE_BAR);
-			section.clientVerticalSpacing = 9;
-			section.setText(PDERuntimeMessages.get().SpyDialog_activeSelection_title);
-			FormText text = toolkit.createFormText(section, true);
-			section.setClient(text);
-
-			TableWrapData td = new TableWrapData();
-			td.align = TableWrapData.FILL;
-			td.grabHorizontal = true;
-			section.setLayoutData(td);
-
-			// time to analyze the selection
-			Class clazz = selection.getClass();
-			StringBuffer buffer = new StringBuffer();
-			buffer.append("<form>"); //$NON-NLS-1$
-			buffer.append(toolkit.createClassSection(text, PDERuntimeMessages.get().SpyDialog_activeSelection_desc, new Class[] {clazz}));
-
-			Class[] interfaces = clazz.getInterfaces();
-			buffer.append(toolkit.createInterfaceSection(text, PDERuntimeMessages.get().SpyDialog_activeSelectionInterfaces_desc, interfaces));
-
-			if (selection instanceof IStructuredSelection) {
-				IStructuredSelection ss = (IStructuredSelection) selection;
-				int size = ss.size();
-				if (size == 1) {
-					clazz = ss.getFirstElement().getClass();
-					buffer.append(toolkit.createClassSection(text, PDERuntimeMessages.get().SpyDialog_activeSelectedElement_desc, new Class[] {clazz}));
-
-					interfaces = clazz.getInterfaces();
-					buffer.append(toolkit.createInterfaceSection(text, PDERuntimeMessages.get().SpyDialog_activeSelectedElementInterfaces_desc, interfaces));
-				} else if (size > 1) {
-					buffer.append(NLS.bind(PDERuntimeMessages.get().SpyDialog_activeSelectedElementsCount_desc, new Integer(size)));
-				}
-			}
-
-			buffer.append("</form>"); //$NON-NLS-1$
-			text.setText(buffer.toString(), true, false);
-		}
-	}
-
+  public void build( ScrolledForm form, SpyFormToolkit toolkit, ExecutionEvent event ) {
+    IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow( event );
+    if( window == null ) // if we don't have an active workbench, we don't have a valid selection to
+// analyze
+      return;
+    // analyze the selection
+    ISelection selection = HandlerUtil.getCurrentSelection( event );
+    if( selection != null ) {
+      Section section = toolkit.createSection( form.getBody(), ExpandableComposite.TITLE_BAR );
+      section.clientVerticalSpacing = 9;
+      section.setText( PDERuntimeMessages.get().SpyDialog_activeSelection_title );
+      FormText text = toolkit.createFormText( section, true );
+      section.setClient( text );
+      TableWrapData td = new TableWrapData();
+      td.align = TableWrapData.FILL;
+      td.grabHorizontal = true;
+      section.setLayoutData( td );
+      // time to analyze the selection
+      Class clazz = selection.getClass();
+      StringBuffer buffer = new StringBuffer();
+      buffer.append( "<form>" ); //$NON-NLS-1$
+      buffer.append( toolkit.createClassSection( text,
+                                                 PDERuntimeMessages.get().SpyDialog_activeSelection_desc,
+                                                 new Class[] {
+                                                   clazz
+                                                 } ) );
+      Class[] interfaces = clazz.getInterfaces();
+      buffer.append( toolkit.createInterfaceSection( text,
+                                                     PDERuntimeMessages.get().SpyDialog_activeSelectionInterfaces_desc,
+                                                     interfaces ) );
+      if( selection instanceof IStructuredSelection ) {
+        IStructuredSelection ss = ( IStructuredSelection )selection;
+        int size = ss.size();
+        if( size == 1 ) {
+          clazz = ss.getFirstElement().getClass();
+          buffer.append( toolkit.createClassSection( text,
+                                                     PDERuntimeMessages.get().SpyDialog_activeSelectedElement_desc,
+                                                     new Class[] {
+                                                       clazz
+                                                     } ) );
+          interfaces = clazz.getInterfaces();
+          buffer.append( toolkit.createInterfaceSection( text,
+                                                         PDERuntimeMessages.get().SpyDialog_activeSelectedElementInterfaces_desc,
+                                                         interfaces ) );
+        } else if( size > 1 ) {
+          buffer.append( NLS.bind( PDERuntimeMessages.get().SpyDialog_activeSelectedElementsCount_desc,
+                                   new Integer( size ) ) );
+        }
+      }
+      buffer.append( "</form>" ); //$NON-NLS-1$
+      text.setText( buffer.toString(), true, false );
+    }
+  }
 }
