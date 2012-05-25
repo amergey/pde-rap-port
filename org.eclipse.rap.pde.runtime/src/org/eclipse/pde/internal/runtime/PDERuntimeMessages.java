@@ -10,11 +10,10 @@
  *******************************************************************************/
 package org.eclipse.pde.internal.runtime;
 
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.rwt.RWT;
 
 
-public class PDERuntimeMessages extends NLS {
+public class PDERuntimeMessages {
 
   private static final String BUNDLE_NAME = "org.eclipse.pde.internal.runtime.pderuntimeresources";//$NON-NLS-1$
   public String ActiveFormEditorSection_Active_Form_Page;

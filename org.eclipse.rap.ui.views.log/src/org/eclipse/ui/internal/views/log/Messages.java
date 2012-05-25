@@ -12,10 +12,9 @@
  *******************************************************************************/
 package org.eclipse.ui.internal.views.log;
 
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.rwt.RWT;
 
-public class Messages extends NLS {
+public class Messages {
 
 	public String LogView_column_message;
 	public String LogView_column_plugin;
